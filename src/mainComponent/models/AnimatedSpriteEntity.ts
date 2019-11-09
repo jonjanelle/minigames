@@ -1,5 +1,5 @@
-import { I2DCoordinate } from "../core/interfaces/I2DCoordinate";
-import { I2DEntity } from "../core/interfaces/I2DEntity";
+import { I2DCoordinate } from "../../core/interfaces/I2DCoordinate";
+import { I2DEntity } from "../../core/interfaces/I2DEntity";
 
 export class AnimatedSpriteEntity implements I2DEntity {
     public image: HTMLImageElement;

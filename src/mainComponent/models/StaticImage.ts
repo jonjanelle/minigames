@@ -1,4 +1,4 @@
-import { I2DCoordinate } from "../core/interfaces/I2DCoordinate";
+import { I2DCoordinate } from "../../core/interfaces/I2DCoordinate";
 
 export class StaticImage {
     public image: HTMLImageElement;
@@ -14,7 +14,7 @@ export class StaticImage {
 
     update(ctx: CanvasRenderingContext2D): void {
         if (this.isLoaded) {
-            ctx.drawImage(this.image, 0, 0);
+            ctx.drawImage(this.image, this.position.x, this.position.y);
         }
     }
 }

@@ -1,10 +1,8 @@
 import React from 'react';
-import './evadeComponent.css';
+import './mainComponent.css';
+import { MainController } from './Main';
 
-import { IGameContainer } from '../core/interfaces/IGameContainer';
-import { EvadeController } from './Evade';
-
-export default class Evade extends React.Component {
+export default class Main extends React.Component {
 
     constructor(props: any) {
         super(props);
@@ -12,7 +10,7 @@ export default class Evade extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({game: new EvadeController("canvas")})
+        this.setState({game: new MainController("canvas")})
     }
 
     componentWillUnmount() {}
