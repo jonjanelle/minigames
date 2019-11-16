@@ -19,8 +19,8 @@ export class GameArea {
 
     constructor(canvasId: string) {
         this.canvas = (document.getElementById(canvasId) as HTMLCanvasElement);
-        this.canvas.width = Math.floor(window.innerWidth*.75);
-        this.canvas.height = Math.floor(window.innerHeight*.5);
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = Math.floor(window.innerHeight*.7);
         
         this.context = (this.canvas.getContext("2d") as CanvasRenderingContext2D);
         // this.myGamePiece = new BlockEntity(30, 30, "red", {x: Math.floor(this.canvas.width*.2), y: 120});

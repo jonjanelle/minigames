@@ -11,15 +11,17 @@ export class MazeGame {
     private endY: number;
     private pad: number;
     private player: ImageEntity;
+    private imageSize: number;
 
     constructor(size: number, canvasId: string) {
         this.boardSize = size;
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D;
-        this.canvas.width = 600;
-        this.canvas.height = 600;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = Math.floor(0.7*window.innerHeight);
         this.pad = 10;
-        this.boxSize = Math.floor((this.canvas.width-2*this.pad)/size);
+        this.boxSize = Math.floor((Math.min(this.canvas.width, this.canvas.height)-2*this.pad)/size);
+        this.imageSize = Math.floor(this.boxSize*0.8);
         this.endY = this.boardSize - 1;
         this.endX = this.boardSize - 1;
         this.drawPlayer = this.drawPlayer.bind(this);
@@ -44,7 +46,6 @@ export class MazeGame {
     
     public clear(): void {
         window.removeEventListener("keydown", this.inputListener);
-        this.context.fillStyle = "#FFFFFF";
         this.context.clearRect(0, 0, this.boardSize*this.boxSize + this.pad, this.boardSize*this.boxSize + this.pad);
     }
     
@@ -93,13 +94,13 @@ export class MazeGame {
     }
 
     private clearCell(x: number, y: number): void {
-        this.context.fillStyle = "#FFFFFF";
-        this.context.fillRect(this.boxSize*x + 12, this.boxSize*y + 12, 54, 54);
+        let xOffset = Math.floor((this.boxSize-this.imageSize)/2) + this.pad;
+        let yOffset = Math.floor((this.boxSize-this.imageSize)/2) + this.pad;
+        this.context.clearRect(this.boxSize*x + xOffset, this.boxSize*y + yOffset, this.imageSize, this.imageSize);
     }
 
     private drawMaze(): void {
         this.clear();
-        console.log(this.maze);
         for (let i = 0; i < this.maze.cells.length; i++) {
             for (let j = 0; j < this.maze.cells[i].length; j++) {
                 if (!this.maze.cells[i][j].rightOpen) {
@@ -127,6 +128,8 @@ export class MazeGame {
     }
 
     private drawPlayer(): void {
-        this.context.drawImage(this.player.image, this.player.position.x*this.boxSize + 12, this.player.position.y*this.boxSize + 12)
+        let xOffset = Math.floor((this.boxSize-this.imageSize)/2) + this.pad;
+        let yOffset = Math.floor((this.boxSize-this.imageSize)/2) + this.pad;
+        this.context.drawImage(this.player.image, this.player.position.x*this.boxSize + xOffset, this.player.position.y*this.boxSize + yOffset, this.imageSize, this.imageSize)
     }
 }

@@ -32,7 +32,8 @@ export class MainController {
             new StaticImage("images/main/bg.png", {x: 250, y: 250})
         ]
 
-        this.player = new SpriteEntity("images/evade/hero.png", {x: 100, y: 100}, 3);
+        this.player = new SpriteEntity("images/evade/hero.png", {x: 100, y: 100}, 4);
+
         this.tiles = [
             new Tile("images/main/tiles/hill_small.png", {x: 20, y: 320}),
             new Tile("images/main/tiles/hill_small.png", {x: 90, y: 310}),
@@ -55,8 +56,8 @@ export class MainController {
         
         this.player.load();
 
-        this.canvas.width = 500;
-        this.canvas.height = 500;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = Math.floor(0.7*window.innerHeight);
 
         this.score = 0;
         this.gravity = 1;
@@ -110,9 +111,9 @@ export class MainController {
             this.player.vX = 0;
         } else {
             if (37 in this.keysDown && this.player.vX > -this.player.speed) // Left 
-                this.player.vX -= 1;
+                this.player.vX -= .1;
             if (39 in this.keysDown && this.player.vX < this.player.speed) // Right
-                this.player.vX += 1;
+                this.player.vX += .1;
         }
 
         //jump

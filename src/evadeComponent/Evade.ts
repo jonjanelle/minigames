@@ -44,8 +44,8 @@ export class EvadeController {
         this.player.load();
         this.enemies.forEach(e => e.load());
 
-        this.canvas.width = 500;
-        this.canvas.height = 500;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = Math.floor(0.7*window.innerHeight);
 
         this.score = 0;
 

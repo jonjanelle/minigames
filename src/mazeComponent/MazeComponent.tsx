@@ -13,8 +13,7 @@ export default class MazeComponent extends React.Component {
   }
 
   componentDidMount() {
-    let mazeGame = new MazeGame(10, "canvas");
-    console.log("here");
+    let mazeGame = new MazeGame(20, "canvas");
     mazeGame.reset();
   }
 

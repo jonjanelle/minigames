@@ -14,11 +14,12 @@ export default class Home extends React.Component {
     private readonly flapper: string = "flapper";
     private readonly maze: string = "maze";
     private readonly evade: string = "evade";
+    private readonly scroller: string = "scroller";
     
     constructor(props: any) {
         super(props);
         this.state = {
-            gameType: this.faller
+            gameType: this.scroller
         };
     }
 
@@ -40,19 +41,21 @@ export default class Home extends React.Component {
             return <FlappyBlock></FlappyBlock>;
         else if (this.gameType === this.evade)
             return <Evade></Evade>;
-        else
+        else if (this.gameType === this.maze)
             return <MazeComponent></MazeComponent>;
+        else 
+            return <Main></Main>;
     }
 
     render() {
         return (
         <div className="Home">
             <div className=" game-container">
-                <Main></Main>
-                {/* {this.getGame()} */}
+                {this.getGame()}
             </div>
             <div className="container-fluid menu-container">
               <div className="row">
+                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.scroller}>Scroller</button></div>
                 <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.maze}>Maze</button></div>
                 <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.flapper}>Flapper</button></div>
                 <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.runner}>Runner</button></div>

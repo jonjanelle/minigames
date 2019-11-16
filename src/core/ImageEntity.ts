@@ -26,7 +26,9 @@ export class ImageEntity implements I2DEntity {
 
     public load(): Promise<boolean> {
         this.image.src = this.imagePath;
-        this.image.onload = () => { this.isLoaded = true; }
+        this.image.onload = () => { 
+            this.isLoaded = true;             
+        }
 
         let promise = new Promise<boolean>((resolve, reject) => {
             let n = 1;
