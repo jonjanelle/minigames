@@ -11,7 +11,7 @@ export class Puzzle {
     }
 
 
-    // does not consider solvability, just looks for duplicates in a row, col, or within a Block
+    // does not consider solvability, just looks for duplicates in a row, col, or Block
     public isValid(): boolean {
         
         this.blocks.forEach(b => {
@@ -19,7 +19,7 @@ export class Puzzle {
                 return false;
         });
 
-        //rows and cols can contain 0's 
+        
 
 
         return false;
@@ -52,7 +52,7 @@ export class Puzzle {
                 col.push(this.blocks[3*j + i].values[3*j+2]);
             }
 
-            if (!(this.isValidSet(row, true) && this.isValidSet(col, true))) {
+            if (!(this.isValidCollection(row, true) && this.isValidCollection(col, true))) {
                 return false;
             }
         }
@@ -60,7 +60,7 @@ export class Puzzle {
         return true;
     }
 
-    private isValidSet(values: number[], isSolved: boolean): boolean {
+    private isValidCollection(values: number[], isSolved: boolean): boolean {
         if (isSolved)
             values = values.filter(v => v !== 0);
 

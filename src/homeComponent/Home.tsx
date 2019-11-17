@@ -7,6 +7,7 @@ import MazeComponent from '../mazeComponent/MazeComponent';
 import Evade from '../evadeComponent/evadeComponent';
 import { MainController } from '../mainComponent/Main';
 import Main from '../mainComponent/mainComponent';
+import Sudoku from '../sudoku/Sudoku';
 
 export default class Home extends React.Component {
     private readonly faller: string = "faller";
@@ -14,6 +15,7 @@ export default class Home extends React.Component {
     private readonly flapper: string = "flapper";
     private readonly maze: string = "maze";
     private readonly evade: string = "evade";
+    private readonly sudoku: string = "sudoku";
     private readonly scroller: string = "scroller";
     
     constructor(props: any) {
@@ -51,7 +53,10 @@ export default class Home extends React.Component {
         return (
         <div className="Home">
             <div className=" game-container">
-                {this.getGame()}
+                {
+                    // this.getGame()
+                    <Sudoku></Sudoku>
+                }
             </div>
             <div className="container-fluid menu-container">
               <div className="row">
@@ -61,6 +66,7 @@ export default class Home extends React.Component {
                 <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.runner}>Runner</button></div>
                 <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.faller}>Faller</button></div>
                 <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.evade}>Evade</button></div>
+                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.sudoku}>Sudoku</button></div>
               </div>
             </div>
         </div>
