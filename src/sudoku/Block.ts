@@ -29,9 +29,8 @@ export class Block {
         let seen: number[] = [];
 
         this.values.forEach(v => {
-            if (v == 0 || !(v in validValues) || v in seen) {
+            if (v == 0 || !(v in validValues) || v in seen)
                 return false;
-            }
 
             seen.push(v);
         });
