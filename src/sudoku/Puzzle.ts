@@ -52,7 +52,7 @@ export class Puzzle {
                 col.push(this.blocks[3*j + i].values[3*j+2]);
             }
 
-            if (!(this.isValidSet(row) && this.isValidSet(col))) {
+            if (!(this.isValidSet(row, true) && this.isValidSet(col, true))) {
                 return false;
             }
         }
@@ -60,7 +60,10 @@ export class Puzzle {
         return true;
     }
 
-    private isValidSet(values: number[]): boolean {
+    private isValidSet(values: number[], isSolved: boolean): boolean {
+        if (isSolved)
+            values = values.filter(v => v !== 0);
+
         if (values.length !== 9)
             return false;
 
