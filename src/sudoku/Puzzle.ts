@@ -1,7 +1,7 @@
 import { Block } from "./Block";
 const validValues: number[] = [1,2,3,4,5,6,7,8,9];
 
-export class Puzzle {
+export default class Puzzle {
     public blocks: Block[];
    
     constructor() {
@@ -18,9 +18,6 @@ export class Puzzle {
             if (!b.isValid())
                 return false;
         });
-
-        
-
 
         return false;
     }
