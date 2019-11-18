@@ -14,6 +14,7 @@
     background: whitesmoke;
     grid-template-columns: repeat(3, 150px);
     grid-template-rows: repeat(3, 150px);
+    height: auto;
 }
 
 .sudoku-block {

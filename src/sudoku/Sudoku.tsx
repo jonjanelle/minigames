@@ -14,7 +14,7 @@ export default class Sudoku extends React.Component {
             selectedCell: -1
         };
     
-        this.onCellClick = this.onCellClick.bind(this);
+        this.setSelectedCell = this.setSelectedCell.bind(this);
         this.checkInput = this.checkInput.bind(this);
     }
 
@@ -39,19 +39,70 @@ export default class Sudoku extends React.Component {
             if ((e.keyCode >= 49 && e.keyCode <= 57) || e.key in this.numberKeyString) {
                 this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = +e.key;
             } else if (e.key === "ArrowUp") {
-
+                this.moveUp();
             } else if (e.key === "ArrowDown") {
-
+                this.moveDown();
             } else if (e.key === "ArrowLeft") {
-
+                this.moveLeft();
             } else if (e.key === "ArrowRight") {
-
+                this.moveRight();
             }
         }
         this.setState({});
     }
 
-    onCellClick(block: number, cell: number) {
+    private moveUp(): void {
+        if (this.selectedBlock < 3 && this.selectedCell < 3) {
+            return;
+        }
+        
+        // if moving across block boundary
+        if (this.selectedCell < 3) {
+            this.setSelectedCell(this.selectedBlock - 3, this.selectedCell + 6);
+        } else {
+            this.setSelectedCell(this.selectedBlock, this.selectedCell - 3);
+        }
+    }
+
+    private moveDown(): void {
+        if (this.selectedBlock >= 6 && this.selectedCell >= 6) {
+            return;
+        }
+    
+        if (this.selectedCell >= 6) {
+            this.setSelectedCell(this.selectedBlock + 3, this.selectedCell - 6);
+        } else {
+            this.setSelectedCell(this.selectedBlock, this.selectedCell + 3);
+        }
+    }
+        /*
+            0 1 2
+            3 4 5
+            6 7 8
+        */
+    private moveRight(): void {
+        if (this.selectedBlock % 3 === 2 && this.selectedCell % 3 === 2) {
+            return;
+        }
+        if (this.selectedCell % 3 === 2) {
+            this.setSelectedCell(this.selectedBlock + 1, this.selectedCell - 2);
+        } else {
+            this.setSelectedCell(this.selectedBlock, this.selectedCell + 1);
+        }
+    }
+
+    private moveLeft(): void {
+        if (this.selectedBlock % 3 === 0 && this.selectedCell % 3 === 0) {
+            return;
+        }
+        if (this.selectedCell % 3 === 0) {
+            this.setSelectedCell(this.selectedBlock - 1, this.selectedCell + 2);
+        } else {
+            this.setSelectedCell(this.selectedBlock, this.selectedCell - 1);
+        }
+    }
+
+    setSelectedCell(block: number, cell: number) {
         if (this.selectedBlock >= 0 && this.selectedCell >= 0) {
             this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].isSelected = false;    
         }
@@ -69,7 +120,7 @@ export default class Sudoku extends React.Component {
                     <div 
                         key={`cell-${j}-${i}`} 
                         className={"sudoku-cell" +  (this.puzzle.blocks[j].cells[i].isSelected ? " selected" : "")}
-                        onClick={() => this.onCellClick(j, i)}>
+                        onClick={() => this.setSelectedCell(j, i)}>
                         {this.puzzle.blocks[j].cells[i].value}
                     </div>
                 );

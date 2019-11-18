@@ -16,4 +16,10 @@
     height: 10%;
     border-top: 1px solid gray;
     padding-top: 16px;
+    overflow-y: scroll;
+    box-sizing: border-box; 
+  }
+
+  .menu-container .row {
+    justify-content: center;
   }

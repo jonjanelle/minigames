@@ -60,13 +60,13 @@ export default class Home extends React.Component {
             </div>
             <div className="container-fluid menu-container">
               <div className="row">
-                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.scroller}>Scroller</button></div>
-                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.maze}>Maze</button></div>
-                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.flapper}>Flapper</button></div>
-                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.runner}>Runner</button></div>
-                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.faller}>Faller</button></div>
-                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.evade}>Evade</button></div>
-                <div className="col mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.sudoku}>Sudoku</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.scroller}>Scroller</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.maze}>Maze</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.flapper}>Flapper</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.runner}>Runner</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.faller}>Faller</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.evade}>Evade</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.sudoku}>Sudoku</button></div>
               </div>
             </div>
         </div>
