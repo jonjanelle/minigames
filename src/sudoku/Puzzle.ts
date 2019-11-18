@@ -40,13 +40,13 @@ export default class Puzzle {
             let row = [];
             let col = [];
             for (let j = 0; j < 3; j++) {
-                row.push(this.blocks[3*i + j].values[3*i]);
-                row.push(this.blocks[3*i + j].values[3*i+1]);
-                row.push(this.blocks[3*i + j].values[3*i+2]);
+                row.push(this.blocks[3*i + j].cells[3*i].value);
+                row.push(this.blocks[3*i + j].cells[3*i+1].value);
+                row.push(this.blocks[3*i + j].cells[3*i+2].value);
     
-                col.push(this.blocks[3*j + i].values[3*j]);
-                col.push(this.blocks[3*j + i].values[3*j+1]);
-                col.push(this.blocks[3*j + i].values[3*j+2]);
+                col.push(this.blocks[3*j + i].cells[3*j].value);
+                col.push(this.blocks[3*j + i].cells[3*j+1].value);
+                col.push(this.blocks[3*j + i].cells[3*j+2].value);
             }
 
             if (!(this.isValidCollection(row, true) && this.isValidCollection(col, true))) {
@@ -77,13 +77,15 @@ export default class Puzzle {
     }
 
     public isSolvable(): boolean {
-        // ############ 
-        // | ^^   ^^  |
-        // |  0   0   |
-        // |    V     |
-        // |  _____   |
-        // \  \___/  / 
-        //  \___|___/
+        //    #######
+        //  ###########
+        // ############# 
+        // | ^^^   ^^^ |
+        // | {0}   {0} |
+        // |     V     |
+        // |   _____   |
+        //  \  \_U_/  / 
+        //   \_______/
         return false;
     }
 }

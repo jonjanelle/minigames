@@ -35,4 +35,15 @@
     font-size: 1.25rem;
     border: 1px solid lightgray;
     box-sizing: border-box; 
+    cursor: pointer;
+}
+
+.sudoku-cell:hover {
+    background-color: lightblue;
+
+}
+
+
+.sudoku-cell.selected {
+    background-color: yellow;
 }
