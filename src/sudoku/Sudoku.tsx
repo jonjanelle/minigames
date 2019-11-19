@@ -2,10 +2,9 @@ import React from 'react';
 import './sudoku.css';
 import Puzzle from './Puzzle';
 import PropTypes from 'prop-types';
-
+import { Constants } from './Constants';
 
 export default class Sudoku extends React.Component {
-    private readonly numberKeyString: string[] = ["1", "2", "3", "4", "5", "6", "7" ,"8" ,"9"];
     constructor(props: any) {
         super(props);
         this.state = {
@@ -27,16 +26,16 @@ export default class Sudoku extends React.Component {
     }
 
     private addListeners(): void {
-        window.addEventListener('keyup', this.checkInput, false);        
+        window.addEventListener('keydown', this.checkInput, false);        
     }
 
     public removeListeners(): void {
-        window.removeEventListener("keyup", this.checkInput);
+        window.removeEventListener("keydown", this.checkInput);
     }
 
     public checkInput(e: KeyboardEvent): void {
         if (this.selectedBlock >= 0 && this.selectedCell >= 0) {
-            if ((e.keyCode >= 49 && e.keyCode <= 57) || e.key in this.numberKeyString) {
+            if ((e.keyCode >= 49 && e.keyCode <= 57) || e.key in Constants.validValueStrings) {
                 this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = +e.key;
             } else if (e.key === "ArrowUp") {
                 this.moveUp();
@@ -75,11 +74,7 @@ export default class Sudoku extends React.Component {
             this.setSelectedCell(this.selectedBlock, this.selectedCell + 3);
         }
     }
-        /*
-            0 1 2
-            3 4 5
-            6 7 8
-        */
+
     private moveRight(): void {
         if (this.selectedBlock % 3 === 2 && this.selectedCell % 3 === 2) {
             return;

@@ -1,9 +1,15 @@
 .sudoku-header {
     display: block;
     padding: 24px 16px;
-    color: gray;
+    color: gainsboro;
     text-align: center;
     font-size: 2rem;
+    font-weight: 500;
+    text-shadow:
+    -1px -1px 0 #666,  
+     1px -1px 0 #666,
+     -1px 1px 0 #666,
+      1px 1px 0 #666;
 }
 
 .sudoku-container {
@@ -41,9 +47,7 @@
 
 .sudoku-cell:hover {
     background-color: lightblue;
-
 }
-
 
 .sudoku-cell.selected {
     background-color: yellow;

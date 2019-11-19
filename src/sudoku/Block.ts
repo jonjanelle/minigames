@@ -1,6 +1,6 @@
 import { Cell } from "./Cell";
+import { Constants } from "./Constants";
 
-const validValues: number[] = [1,2,3,4,5,6,7,8,9];
 
 export class Block {
     public cells: Cell[];  
@@ -26,7 +26,7 @@ export class Block {
         let entryCount: any = {};
         
         this.cells.filter(c => c.value !== 0).forEach(c => {
-            if (entryCount[c.value] === undefined && (c.value in validValues)) {
+            if (entryCount[c.value] === undefined && (c.value in Constants.validValues)) {
                 entryCount[c.value] = 1;
             } else {
                 return false;
@@ -41,7 +41,7 @@ export class Block {
         let seen: number[] = [];
 
         this.cells.forEach(c => {
-            if (c.value == 0 || !(c.value in validValues) || c.value in seen)
+            if (c.value == 0 || !(c.value in Constants.validValues) || c.value in seen)
                 return false;
 
             seen.push(c.value);

@@ -1,10 +1,10 @@
 import { Block } from "./Block";
-const validValues: number[] = [1,2,3,4,5,6,7,8,9];
+import { Constants } from "./Constants";
 
 export default class Puzzle {
     public blocks: Block[];
-   
     constructor() {
+        
         this.blocks = [new Block(), new Block(), new Block(),
                         new Block(), new Block(), new Block(),
                         new Block(), new Block(), new Block()];
@@ -66,7 +66,7 @@ export default class Puzzle {
 
         let entryCount: any = {};
         values.forEach(v => {
-            if (entryCount[v] === undefined && (v in validValues)) {
+            if (entryCount[v] === undefined && (v in Constants.validValues)) {
                 entryCount[v] = 1;
             } else {
                 return false;
@@ -76,6 +76,29 @@ export default class Puzzle {
         return true;
     }
 
+    //[a, b]
+    private randInt(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    private emptyCount(): number {
+        return this.blocks.map(b => b.cells.filter(c => c.value === 0).length).reduce((total, current) => current + total);
+    }
+
+    /*
+    1 Randomly take any number 1-9 (one not tried before).
+    2 Check if it is safe to put in the cell (row, column, and box).
+    3 If safe: place it and increment to next location, then go to step 1.
+    4 If not safe:  Maintain current position and go to step 1.
+    5 Once matrix is fully filled, remove k no. of elements randomly to complete game.
+    */
+    public generate() {
+        while (this.emptyCount() > 0) {
+
+        }
+     }
+
+    
     public isSolvable(): boolean {
         //    #######
         //  ###########
