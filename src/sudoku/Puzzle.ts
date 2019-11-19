@@ -93,8 +93,12 @@ export default class Puzzle {
     5 Once matrix is fully filled, remove k no. of elements randomly to complete game.
     */
     public generate() {
+        let currentBlock = 0;
+        let currentCell = 0;
+        
         while (this.emptyCount() > 0) {
 
+            let value = this.randInt(0, 9);
         }
      }
 
