@@ -26,7 +26,7 @@ export class Block {
         let entryCount: any = {};
         
         this.cells.filter(c => c.value !== 0).forEach(c => {
-            if (entryCount[c.value] === undefined && (c.value in Constants.validValues)) {
+            if (entryCount[c.value] === undefined && this.isValidValue(c.value)) {
                 entryCount[c.value] = 1;
             } else {
                 return false;
@@ -41,12 +41,16 @@ export class Block {
         let seen: number[] = [];
 
         this.cells.forEach(c => {
-            if (c.value == 0 || !(c.value in Constants.validValues) || c.value in seen)
+            if (c.value == 0 || !this.isValidValue(c.value) || seen.findIndex(s => s === c.value) >= 0)
                 return false;
 
             seen.push(c.value);
         });
 
         return true;
+    }
+
+    private isValidValue(value: number): boolean {
+        return (Constants.validValues.findIndex(vv => vv === value) >= 0);
     }
 }
