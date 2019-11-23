@@ -7,7 +7,7 @@ import MazeComponent from '../mazeComponent/MazeComponent';
 import Evade from '../evadeComponent/evadeComponent';
 import { MainController } from '../mainComponent/Main';
 import Main from '../mainComponent/mainComponent';
-import Sudoku from '../sudoku/Sudoku';
+import Sudoku from '../sudokuComponent/Sudoku';
 
 export default class Home extends React.Component {
     private readonly faller: string = "faller";
@@ -21,7 +21,7 @@ export default class Home extends React.Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            gameType: this.scroller
+            gameType: this.sudoku
         };
     }
 
@@ -45,8 +45,10 @@ export default class Home extends React.Component {
             return <Evade></Evade>;
         else if (this.gameType === this.maze)
             return <MazeComponent></MazeComponent>;
-        else 
+        else if (this.gameType === this.scroller)
             return <Main></Main>;
+        else 
+            return <Sudoku></Sudoku>;
     }
 
     render() {
@@ -54,19 +56,19 @@ export default class Home extends React.Component {
         <div className="Home">
             <div className=" game-container">
                 {
-                    // this.getGame()
-                    <Sudoku></Sudoku>
+                    this.getGame()
+                    // <Sudoku></Sudoku>
                 }
             </div>
             <div className="container-fluid menu-container">
               <div className="row">
-                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.scroller}>Scroller</button></div>
-                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.maze}>Maze</button></div>
-                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.flapper}>Flapper</button></div>
-                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.runner}>Runner</button></div>
-                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.faller}>Faller</button></div>
-                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.evade}>Evade</button></div>
                 <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.sudoku}>Sudoku</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.maze}>Maze</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.scroller}>Scroll</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.flapper}>Flap</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.runner}>Run</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.faller}>Fall</button></div>
+                <div className="col-md-auto col-sm-3 mb-4"><button className="btn btn-outline-secondary" onClick={() => this.gameType = this.evade}>Evade</button></div>
               </div>
             </div>
         </div>

@@ -21,16 +21,19 @@
     grid-template-columns: repeat(3, 150px);
     grid-template-rows: repeat(3, 150px);
     height: auto;
+    border: 3px solid gray;
+    box-sizing: border-box;
 }
 
 .sudoku-block {
     width: 150px;
     height: 150px;
-    border: 1px solid darkslategray;
+    border: 1px solid black;
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(3, 50px);
     box-sizing: border-box; 
+    z-index: 2;
 }
 
 .sudoku-cell {
@@ -46,9 +49,38 @@
 }
 
 .sudoku-cell:hover {
-    background-color: lightblue;
+    background-color: rgb(240, 178, 178);
 }
 
 .sudoku-cell.selected {
-    background-color: yellow;
+    background-color: rgb(240, 240, 80)
+}
+
+.player-controls {
+    margin: 0 auto;
+    width: fit-content;
+    margin-top: 24px;
+    padding: 16px 48px;
+    background-color: rgba(255, 255, 255, .85);
+    border-radius: 4px;
+}
+
+.player-controls>button {
+    border-radius: 8px;
+    padding: 24px 16px;
+    margin-right: 8px;
+    margin-left: 8px;
+    color: rgba(0, 0, 0, .7);
+    background-color: rgb(204, 235, 235);
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+.player-controls>button:hover {
+    background-color: rgb(215, 255, 215);
+}
+
+.icon-button>svg {
+    width: 24px !important; 
+    height: auto;
 }

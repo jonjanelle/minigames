@@ -3,8 +3,16 @@ import './sudoku.css';
 import Puzzle from './Puzzle';
 import PropTypes from 'prop-types';
 import { Constants } from './Constants';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 export default class Sudoku extends React.Component {
+    get puzzle(): Puzzle { return ((this.state as any).puzzle as Puzzle); }
+    get selectedBlock(): number { return ((this.state as any).selectedBlock as number); }
+    get selectedCell(): number { return ((this.state as any).selectedCell as number);}
+
+    private readonly editAction: string = 'edit';
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -15,6 +23,7 @@ export default class Sudoku extends React.Component {
     
         this.setSelectedCell = this.setSelectedCell.bind(this);
         this.checkInput = this.checkInput.bind(this);
+        this.onControlClick = this.onControlClick.bind(this);
     }
 
     componentDidMount() {
@@ -37,6 +46,8 @@ export default class Sudoku extends React.Component {
         if (this.selectedBlock >= 0 && this.selectedCell >= 0) {
             if ((e.keyCode >= 49 && e.keyCode <= 57) || e.key in Constants.validValueStrings) {
                 this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = +e.key;
+            } else if (e.key === 'c' || e.key === 'Backspace') {
+                this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = 0;
             } else if (e.key === "ArrowUp") {
                 this.moveUp();
             } else if (e.key === "ArrowDown") {
@@ -46,16 +57,15 @@ export default class Sudoku extends React.Component {
             } else if (e.key === "ArrowRight") {
                 this.moveRight();
             }
+            
+            this.setState({});
         }
-        this.setState({});
     }
 
     private moveUp(): void {
         if (this.selectedBlock < 3 && this.selectedCell < 3) {
             return;
         }
-        
-        // if moving across block boundary
         if (this.selectedCell < 3) {
             this.setSelectedCell(this.selectedBlock - 3, this.selectedCell + 6);
         } else {
@@ -67,7 +77,6 @@ export default class Sudoku extends React.Component {
         if (this.selectedBlock >= 6 && this.selectedCell >= 6) {
             return;
         }
-    
         if (this.selectedCell >= 6) {
             this.setSelectedCell(this.selectedBlock + 3, this.selectedCell - 6);
         } else {
@@ -109,14 +118,15 @@ export default class Sudoku extends React.Component {
     getCells() {
         let blocks = [];
         for (let j = 0; j < 9; j++) {
-            let cells = [];
+            let cells: any = [];
             for (let i = 0; i < 9; i++) {
+                let value = this.puzzle.blocks[j].cells[i].value;
                 cells.push(
                     <div 
                         key={`cell-${j}-${i}`} 
                         className={"sudoku-cell" +  (this.puzzle.blocks[j].cells[i].isSelected ? " selected" : "")}
                         onClick={() => this.setSelectedCell(j, i)}>
-                        {this.puzzle.blocks[j].cells[i].value}
+                        { value > 0 ? value : ''}
                     </div>
                 );
             }
@@ -126,20 +136,39 @@ export default class Sudoku extends React.Component {
                 </div>
             );
         }
-
         return blocks;
     }
 
-    get puzzle(): Puzzle {
-        return ((this.state as any).puzzle as Puzzle);
+    getControls() {
+        let valueButtons: any = [];
+        for (let value of Constants.validValueStrings) {
+            valueButtons.push(
+                <button type="button" onClick={() => this.onControlClick(value)}>{value}</button>
+            );
+        }
+
+        valueButtons.push(
+            <button type="button" className="icon-button" onClick={() => this.onControlClick('0')}>
+                 <FontAwesomeIcon icon={faEraser} />
+            </button>
+        );
+        valueButtons.push(
+            <button type="button" className="icon-button" onClick={() => this.onControlClick(this.editAction)}>
+                 <FontAwesomeIcon icon={faEdit} />
+            </button>
+        );
+
+        return valueButtons;
     }
 
-    get selectedBlock(): number {
-        return ((this.state as any).selectedBlock as number);
-    }
+    onControlClick(value: string): void {
+        if (value === this.editAction) {
+            alert('hi');
+        } else {
+            this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = +value;
+        }
 
-    get selectedCell(): number {
-        return ((this.state as any).selectedCell as number);
+        this.setState({});
     }
 
     render() {
@@ -147,7 +176,11 @@ export default class Sudoku extends React.Component {
             <div>
                 <div className="sudoku-header">Sudoku</div>
                 <div className="sudoku-container">
-                    {this.getCells()} 
+                    {this.getCells()}
+                   
+                </div>
+                <div className="player-controls">
+                    {this.getControls()}
                 </div>
             </div>
         );

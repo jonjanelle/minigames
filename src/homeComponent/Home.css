@@ -8,6 +8,7 @@
     max-height: 90%;
     height: 90%;
     background-image: url("./bg2.jpg");
+    overflow-y: auto;
     
   }
   
@@ -17,7 +18,7 @@
     height: 10%;
     border-top: 1px solid gray;
     padding-top: 16px;
-    overflow-y: scroll;
+    overflow-y: auto;
     box-sizing: border-box; 
   }
 
