@@ -7,18 +7,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEraser, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 export default class Sudoku extends React.Component {
-    get puzzle(): Puzzle { return ((this.state as any).puzzle as Puzzle); }
-    get selectedBlock(): number { return ((this.state as any).selectedBlock as number); }
-    get selectedCell(): number { return ((this.state as any).selectedCell as number);}
+    public get puzzle(): Puzzle { return ((this.state as any).puzzle as Puzzle); }
+    public get selectedBlock(): number { return ((this.state as any).selectedBlock as number); }
+    public get selectedCell(): number { return ((this.state as any).selectedCell as number); }
+    public get isNoteMode(): boolean { return ((this.state as any).isNoteMode as boolean); }
 
-    private readonly editAction: string = 'edit';
+    private readonly noteAction: string = 'note';
 
     constructor(props: any) {
         super(props);
         this.state = {
             puzzle: new Puzzle(),
             selectedBlock: -1,
-            selectedCell: -1
+            selectedCell: -1,
+            isNoteMode: false
         };
     
         this.setSelectedCell = this.setSelectedCell.bind(this);
@@ -45,9 +47,13 @@ export default class Sudoku extends React.Component {
     public checkInput(e: KeyboardEvent): void {
         if (this.selectedBlock >= 0 && this.selectedCell >= 0) {
             if ((e.keyCode >= 49 && e.keyCode <= 57) || e.key in Constants.validValueStrings) {
-                this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = +e.key;
+                if (this.isNoteMode) {
+                    this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].addNote(+e.key);
+                } else {
+                    this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].setValue(+e.key);
+                }
             } else if (e.key === 'c' || e.key === 'Backspace') {
-                this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = 0;
+                this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].setValue(0);
             } else if (e.key === "ArrowUp") {
                 this.moveUp();
             } else if (e.key === "ArrowDown") {
@@ -58,6 +64,23 @@ export default class Sudoku extends React.Component {
                 this.moveRight();
             }
             
+            this.setState({});
+        }
+    }
+
+    public onControlClick(value: string): void {
+        if (value === this.noteAction) {
+            this.setState({isNoteMode: !this.isNoteMode});
+        } else {
+            if (this.isNoteMode) {
+                if (value == '0') {
+                    this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].setValue(0);
+                } else {
+                    this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].addNote(+value);
+                }
+            } else {
+                this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].setValue(+value);
+            }
             this.setState({});
         }
     }
@@ -106,7 +129,7 @@ export default class Sudoku extends React.Component {
         }
     }
 
-    setSelectedCell(block: number, cell: number) {
+    private setSelectedCell(block: number, cell: number): void {
         if (this.selectedBlock >= 0 && this.selectedCell >= 0) {
             this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].isSelected = false;    
         }
@@ -115,18 +138,30 @@ export default class Sudoku extends React.Component {
         this.setState({selectedBlock: block, selectedCell: cell});
     }
 
-    getCells() {
+    private getCellValue(blockN: number, cellN: number): string {
+        let cell = this.puzzle.blocks[blockN].cells[cellN];
+        if (cell.notes.length > 0) {
+            return cell.notes.sort().join(', ');
+        } else {
+            return cell.value > 0 ? cell.value.toString() : '';
+        }
+    }
+
+
+    public getCells(): JSX.Element[] {
         let blocks = [];
         for (let j = 0; j < 9; j++) {
             let cells: any = [];
             for (let i = 0; i < 9; i++) {
-                let value = this.puzzle.blocks[j].cells[i].value;
+                let hasNotes = this.puzzle.blocks[j].cells[i].notes.length > 0;
                 cells.push(
                     <div 
                         key={`cell-${j}-${i}`} 
                         className={"sudoku-cell" +  (this.puzzle.blocks[j].cells[i].isSelected ? " selected" : "")}
                         onClick={() => this.setSelectedCell(j, i)}>
-                        { value > 0 ? value : ''}
+                        <span className={hasNotes ? 'note-cell' : 'value-cell'}>
+                            {this.getCellValue(j, i)}
+                        </span>
                     </div>
                 );
             }
@@ -139,45 +174,50 @@ export default class Sudoku extends React.Component {
         return blocks;
     }
 
-    getControls() {
+    public getControls(): JSX.Element[]  {
         let valueButtons: any = [];
+        let count = 0;
         for (let value of Constants.validValueStrings) {
             valueButtons.push(
-                <button type="button" onClick={() => this.onControlClick(value)}>{value}</button>
+                <button type="button" 
+                        onClick={() => this.onControlClick(value)}
+                        key={'button' + count}>
+                    {value}
+                </button>
             );
+            count += 1;
         }
 
         valueButtons.push(
-            <button type="button" className="icon-button" onClick={() => this.onControlClick('0')}>
-                 <FontAwesomeIcon icon={faEraser} />
+            <button type="button" 
+                    className="icon-button" 
+                    onClick={() => this.onControlClick('0')}
+                    title="clear selected cell"
+                    key={'button' + count}>
+                <FontAwesomeIcon icon={faEraser} />
             </button>
         );
+
+        count += 1;
         valueButtons.push(
-            <button type="button" className="icon-button" onClick={() => this.onControlClick(this.editAction)}>
-                 <FontAwesomeIcon icon={faEdit} />
+            <button type="button" 
+                    className={ `icon-button ${this.isNoteMode ? 'active-button' : ''}` } 
+                    onClick={() => this.onControlClick(this.noteAction)}
+                    title="toggle note mode"
+                    key={'button' + count}>
+                <FontAwesomeIcon icon={faEdit} />
             </button>
         );
 
         return valueButtons;
     }
 
-    onControlClick(value: string): void {
-        if (value === this.editAction) {
-            alert('hi');
-        } else {
-            this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].value = +value;
-        }
-
-        this.setState({});
-    }
-
-    render() {
+    public render(): JSX.Element {
         return (
             <div>
                 <div className="sudoku-header">Sudoku</div>
                 <div className="sudoku-container">
                     {this.getCells()}
-                   
                 </div>
                 <div className="player-controls">
                     {this.getControls()}

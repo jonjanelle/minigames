@@ -11,6 +11,7 @@ export class Block {
                        new Cell(0),new Cell(0),new Cell(0),
                        new Cell(0),new Cell(0),new Cell(0)];
         this.isSelected = false;
+        console.log(this.cells)
     }
 
     public select(): void {
@@ -24,9 +25,8 @@ export class Block {
     public isValid(): boolean {
         //should be able store this elsewhere and update when move is made.
         let entryCount: any = {};
-        
         this.cells.filter(c => c.value !== 0).forEach(c => {
-            if (entryCount[c.value] === undefined && this.isValidValue(c.value)) {
+            if (entryCount[c.value] === 0 && this.isValidValue(c.value)) {
                 entryCount[c.value] = 1;
             } else {
                 return false;

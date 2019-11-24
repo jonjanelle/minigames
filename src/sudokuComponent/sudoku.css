@@ -39,13 +39,20 @@
 .sudoku-cell {
     width: 50px;
     height: 50px;
-    line-height: 50px;
-    font-weight: bold;
     color: rgba(0, 0, 0, .7);
-    font-size: 1.25rem;
     border: 1px solid lightgray;
     box-sizing: border-box; 
     cursor: pointer;
+}
+
+.value-cell {
+    line-height: 50px;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.note-cell {
+    font-size: 12px;
 }
 
 .sudoku-cell:hover {
@@ -60,19 +67,19 @@
     margin: 0 auto;
     width: fit-content;
     margin-top: 24px;
-    padding: 16px 48px;
+    padding: 16px 24px;
     background-color: rgba(255, 255, 255, .85);
     border-radius: 4px;
 }
 
 .player-controls>button {
     border-radius: 8px;
-    padding: 24px 16px;
+    padding: 16px 16px;
     margin-right: 8px;
     margin-left: 8px;
     color: rgba(0, 0, 0, .7);
     background-color: rgb(204, 235, 235);
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bolder;
 }
 
@@ -83,4 +90,8 @@
 .icon-button>svg {
     width: 24px !important; 
     height: auto;
+}
+
+.icon-button.active-button, .icon-button.active-button:hover {
+    background-color: yellow;
 }
