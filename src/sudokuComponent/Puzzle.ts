@@ -3,65 +3,62 @@ import { Constants } from "./Constants";
 import { timingSafeEqual } from "crypto";
 
 export default class Puzzle {
-    public blocks: Block[];
+    public blocks: Block[] = [];
+    
     constructor() {
-        
-        this.blocks = [new Block(), new Block(), new Block(),
-                        new Block(), new Block(), new Block(),
-                        new Block(), new Block(), new Block()];
-
         this.generate();
     }
 
+    private resetBlocks(): void {
+        this.blocks = [new Block(), new Block(), new Block(),
+            new Block(), new Block(), new Block(),
+            new Block(), new Block(), new Block()];
+    }
 
     /**
-     * true if the current configuration is valid. 
-     * Does not confirm that the puzzle is solved or that all entries are in the correct positions.
+     * @param isSolved true if board must be solved to return true, false if it only must be value
      *  */  
-    public isValid(): boolean {
+    public checkBoard(isSolved: boolean = false): boolean {
         for (let i = 0; i < this.blocks.length; i++) {
             let blockValues = this.blocks[i].cells.map(c => c.value);
-            if (!this.isValidCollection(blockValues, false)) {
+            if (!this.isValidCollection(blockValues, isSolved)) {
                 return false;
             }
         }
 
-        return this.checkRowsAndCols();
-    }
-
-    /**
-     * true if the puzzle is fully solved.
-     */
-    public isSolved(): boolean {
-        this.blocks.forEach(b => {
-            if (!b.isSolved())
-                return false;
-        });
-
-        if (!this.checkRowsAndCols(true)) {
-            return false
-        }
-
-        return true;
+        return this.checkRowsAndCols(isSolved);
     }
 
 
-    private checkRowsAndCols(isSolved: boolean = false, debug: boolean=false): boolean {
+    private checkRowsAndCols(isSolved: boolean = false): boolean {
         for (let i = 0; i < 3; i++){
-            let row = [];
-            let col = [];
             for (let j = 0; j < 3; j++) {
-                row.push(this.blocks[3*i + j].cells[3*i].value);
-                row.push(this.blocks[3*i + j].cells[3*i+1].value);
-                row.push(this.blocks[3*i + j].cells[3*i+2].value);
-    
-                col.push(this.blocks[3*j + i].cells[3*j].value);
-                col.push(this.blocks[3*j + i].cells[3*j+1].value);
-                col.push(this.blocks[3*j + i].cells[3*j+2].value);
-            }
-            console.log("row: ", row, "col", col);
-            if (!(this.isValidCollection(row, isSolved) && this.isValidCollection(col, isSolved))) {
-                return false;
+                let row: number[] = [];
+                let col: number[] = [];
+
+                row.push(this.blocks[3*i].cells[3*j].value);
+                row.push(this.blocks[3*i].cells[3*j + 1].value);
+                row.push(this.blocks[3*i].cells[3*j + 2].value);
+                row.push(this.blocks[3*i+1].cells[3*j].value);
+                row.push(this.blocks[3*i+1].cells[3*j + 1].value);
+                row.push(this.blocks[3*i+1].cells[3*j + 2].value);
+                row.push(this.blocks[3*i+2].cells[3*j].value);
+                row.push(this.blocks[3*i+2].cells[3*j + 1].value);
+                row.push(this.blocks[3*i+2].cells[3*j + 2].value);
+          
+                col.push(this.blocks[i].cells[j].value);
+                col.push(this.blocks[i].cells[j+3].value);
+                col.push(this.blocks[i].cells[j+6].value);
+                col.push(this.blocks[i+3].cells[j].value);
+                col.push(this.blocks[i+3].cells[j+3].value);
+                col.push(this.blocks[i+3].cells[j+6].value);
+                col.push(this.blocks[i+6].cells[j].value);
+                col.push(this.blocks[i+6].cells[j+3].value);
+                col.push(this.blocks[i+6].cells[j+6].value);
+
+                if (!(this.isValidCollection(row, isSolved) && this.isValidCollection(col, isSolved))) {
+                    return false;
+                }
             }
         }
 
@@ -109,44 +106,82 @@ export default class Puzzle {
         return this.blocks.map(b => b.cells.filter(c => c.value === 0).length).reduce((total, current) => current + total);
     }
 
-
-    /**
-     * 
-     * [1] Randomly take any number 1-9 (one not tried before).
-     * [2] Check if it is safe to put in the cell (row, column, and box).
-     * [3] If safe: place it and increment to next location, then go to step 1.
-     * [4] If not safe:  Maintain current position and go to step 1.
-     * [5] Once matrix is fully filled, remove k no. of elements randomly to complete game.
-     */
     public generate() {
         let currentBlock = 0;
         let currentCell = 0;
-        let candidates: number[] =  Object.assign([], Constants.validValues);
-        let tries = 0;
 
-        while (this.emptyCount() > 0 && currentBlock < this.blocks.length && tries < 1000) {
-            tries++;
-            let valuePlaced = false;
-            for (let i = 0; i < candidates.length; i++) {
-                let valueIndex = this.randInt(0, candidates.length - 1);
-                this.blocks[currentBlock].cells[currentCell].value = candidates[valueIndex];
-                if (this.isValid()){
+        // let first = true;
+        // while (first || !this.checkBoard(true)) {
+            this.resetBlocks();
+            // first = false;
+            while (this.emptyCount() > 0 && currentBlock < this.blocks.length) {
+                let valuePlaced = false;
+                let candidates =  Object.assign([], Constants.validValues);
+                
+                //
+                for (let i = 0; i < candidates.length; i++) {
+                    let valueIndex = this.randInt(0, candidates.length - 1);
+                    this.blocks[currentBlock].cells[currentCell].value = candidates[valueIndex];
                     candidates = candidates.filter(c => c !== candidates[valueIndex]);
-                    valuePlaced = true;
-                    break;
+                    
+                    if (this.checkBoard()){
+                        valuePlaced = true;
+                        break;
+                    } else {
+                        this.blocks[currentBlock].cells[currentCell].value = 0;
+                    }
                 }
+    
+                // if (valuePlaced) {
+                    if (currentCell < this.blocks[currentBlock].cells.length-1) {
+                        currentCell += 1;
+                    } else {
+                        currentCell = 0;
+                        currentBlock += 1;
+                    }
+                // }
             }
+        // }
+    }
 
-            if (valuePlaced) {
-                if (currentCell < this.blocks[currentBlock].cells.length-1) {
-                    currentCell += 1;
-                } else {
-                    currentCell = 0;
-                    currentBlock += 1;
-                    candidates =  Object.assign([], Constants.validValues);
-                }
+    private printRowsAndCols(): void {
+        let rows = [];
+        let cols = [];
+
+        for (let i = 0; i < 3; i++){
+            for (let j = 0; j < 3; j++) {
+                let row: number[] = [];
+                let col: number[] = [];
+
+                row.push(this.blocks[3*i].cells[3*j].value);
+                row.push(this.blocks[3*i].cells[3*j + 1].value);
+                row.push(this.blocks[3*i].cells[3*j + 2].value);
+                row.push(this.blocks[3*i+1].cells[3*j].value);
+                row.push(this.blocks[3*i+1].cells[3*j + 1].value);
+                row.push(this.blocks[3*i+1].cells[3*j + 2].value);
+                row.push(this.blocks[3*i+2].cells[3*j].value);
+                row.push(this.blocks[3*i+2].cells[3*j + 1].value);
+                row.push(this.blocks[3*i+2].cells[3*j + 2].value);
+            
+                col.push(this.blocks[i].cells[j].value);
+                col.push(this.blocks[i].cells[j+3].value);
+                col.push(this.blocks[i].cells[j+6].value);
+                
+                col.push(this.blocks[i+3].cells[j].value);
+                col.push(this.blocks[i+3].cells[j+3].value);
+                col.push(this.blocks[i+3].cells[j+6].value);
+                
+                col.push(this.blocks[i+6].cells[j].value);
+                col.push(this.blocks[i+6].cells[j+3].value);
+                col.push(this.blocks[i+6].cells[j+6].value);
+
+                rows.push(row);
+                cols.push(col);
             }
         }
+
+        console.log("rows", rows);
+        console.log("cols", cols);
     }
 
     /**
@@ -170,19 +205,44 @@ export default class Puzzle {
         return array;
     }
 
+    private getPossibleValues(blockIndex: number, cellIndex: number): number[] {
+        
+        return [];
+    }
+
     /**
-     * Method not needed.
+     * TODO
      */
-    public isSolvable(): boolean {
-        //    #######
-        //  ###########
-        // ############# 
-        // | ^^^   ^^^ |
-        // | {0}   {0} |
-        // |     V     |
-        // |   _____   |
-        //  \  \_U_/  / 
-        //   \_______/
+    public solve(blockIndex: number, cellIndex: number): boolean {
+        if (blockIndex >= 8 && cellIndex > 8)
+          return true
+      
+        // The list of possible values: the intersection of values not
+        // already in the cell's row, column or square
+        let possibleValues: number[] = []; // board.get_possible_values_at(cell_index)
+      
+        // Keep track of the original value so we can set it back if all the possible values don't work
+        let originalValue = this.blocks[blockIndex].cells[cellIndex].value;
+      
+        // iterate through each value
+        for (let value of possibleValues) {
+            // Set the cell to the new value
+            this.blocks[blockIndex].cells[cellIndex].value = value;
+        
+            // recursively call solve, if this call returns true than the puzzle
+            // is solved if it's not we need to try the next possible value
+            if (cellIndex < this.blocks[blockIndex].cells.length-1) {
+                cellIndex += 1;
+            } else {
+                cellIndex = 0;
+                blockIndex += 1;
+            }
+
+            if (this.solve(blockIndex, cellIndex))
+              return true;
+        }
+
+        //current board not solvable 
         return false;
     }
 }
