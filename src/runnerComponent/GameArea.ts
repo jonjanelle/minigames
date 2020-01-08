@@ -22,7 +22,7 @@ export class GameArea {
         
         this.context = (this.canvas.getContext("2d") as CanvasRenderingContext2D);
         // this.myGamePiece = new BlockEntity(30, 30, "red", {x: 20, y: 0});
-        this.myGamePiece = new ImageEntity({x: 20, y: 0}, "./images/maze/flappy.png");
+        this.myGamePiece = new ImageEntity({x: 20, y: 0}, "./images/misc/flappy.png");
         this.myScore = new Text("24px", "Consolas", "black", {x: this.canvas.width*.65, y: 24}, "Hello there!");
         this.gravity = 0.5;
         this.myObstacles = [];

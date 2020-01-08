@@ -45,6 +45,8 @@ export default class Sudoku extends React.Component {
     }
 
     public checkInput(e: KeyboardEvent): void {
+        let needRefresh: boolean = true;
+
         if (this.selectedBlock >= 0 && this.selectedCell >= 0) {
             if ((e.keyCode >= 49 && e.keyCode <= 57) || e.key in Constants.validValueStrings) {
                 if (this.isNoteMode) {
@@ -54,6 +56,9 @@ export default class Sudoku extends React.Component {
                 }
             } else if (e.key === 'c' || e.key === 'Backspace') {
                 this.puzzle.blocks[this.selectedBlock].cells[this.selectedCell].setValue(0);
+            }else if (e.key === "n") {
+                this.setState({isNoteMode: !this.isNoteMode});
+                needRefresh = false;
             } else if (e.key === "ArrowUp") {
                 this.moveUp();
             } else if (e.key === "ArrowDown") {
@@ -64,7 +69,8 @@ export default class Sudoku extends React.Component {
                 this.moveRight();
             }
             
-            this.setState({});
+            if (needRefresh)
+                this.setState({});
         }
     }
 
